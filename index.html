@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Website Source Code Viewer</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: #121212;
+            color: #f5f5f5;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .container {
+            background: linear-gradient(135deg, #1e1e1e, #2e2e2e);
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+            width: 80%;
+            max-width: 900px;
+            text-align: center;
+        }
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            color: #00f9d4;
+        }
+        input, button {
+            padding: 15px;
+            font-size: 1rem;
+            margin-top: 20px;
+            width: 80%;
+            max-width: 500px;
+            border: 1px solid #444;
+            border-radius: 8px;
+        }
+        button {
+            background-color: #00f9d4;
+            color: #121212;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #00d4c9;
+        }
+        textarea {
+            width: 100%;
+            height: 400px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            color: #f5f5f5;
+            background-color: #333;
+            border: 1px solid #444;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 20px;
+            resize: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Website Source Code Viewer</h1>
+        <input type="text" id="urlInput" placeholder="Enter website URL (e.g., https://example.com)" />
+        <button onclick="fetchSourceCode()">Show Source Code</button>
+        <textarea id="sourceCode" readonly></textarea>
+    </div>
+
+    <script>
+        async function fetchSourceCode() {
+            const url = document.getElementById('urlInput').value;
+            if (!url) {
+                alert('Please enter a valid URL');
+                return;
+            }
+
+            try {
+                const response = await fetch(`/get-source?url=${encodeURIComponent(url)}`);
+                const data = await response.json();
+                
+                if (data.success) {
+                    document.getElementById('sourceCode').value = data.sourceCode;
+                } else {
+                    alert('Failed to fetch source code. Ensure the URL is correct.');
+                }
+            } catch (error) {
+                alert('Error fetching the source code.');
+            }
+        }
+    </script>
+</body>
+</html>
